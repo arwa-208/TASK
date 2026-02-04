@@ -1,0 +1,127 @@
+CREATE DATABASE CompanyDB
+use CompanyDB
+
+CREATE TABLE EMP
+(
+    SSN CHAR(9) PRIMARY KEY,
+    BD DATE,
+    Gender CHAR(1),
+    First NVARCHAR(50),
+    Last NVARCHAR(50),
+    Dnum INT,
+    Superid CHAR(9)
+)
+
+CREATE TABLE DEPT
+(
+    Dnum INT PRIMARY KEY,
+    DName NVARCHAR(100),
+    MgrSSN CHAR,
+    Hiredate DATE
+)
+
+ALTER TABLE EMP
+ADD CONSTRAINT FK_EMP_DEPT
+FOREIGN KEY (Dnum) REFERENCES Dept(Dnum);
+
+ALTER TABLE EMP
+ADD CONSTRAINT FK_EMP_SUP
+FOREIGN KEY (Superid) REFERENCES EMP(SSN);
+
+ALTER TABLE Dept
+ADD CONSTRAINT FK_DEPT_MGR
+FOREIGN KEY (MgrSSN) REFERENCES EMP(SSN);
+
+CREATE TABLE Locations 
+(
+    Dnum INT,
+    Loc NVARCHAR(100),
+    PRIMARY KEY (Dnum, Loc),
+    FOREIGN KEY (Dnum) REFERENCES Dept(Dnum)
+);
+
+CREATE TABLE Project
+(
+    Pnum INT PRIMARY KEY,
+    Pname NVARCHAR(100),
+    City NVARCHAR(100),
+    Loc NVARCHAR(100),
+    Dnum INT,
+    FOREIGN KEY (Dnum) REFERENCES Dept(Dnum)
+);
+
+CREATE TABLE Dependent
+(
+    SSN CHAR(9),
+    DeptName NVARCHAR(100),
+    Gender CHAR(1),
+    BD DATE,
+    PRIMARY KEY (SSN, DeptName),
+    FOREIGN KEY (SSN) REFERENCES EMP(SSN)
+);
+CREATE TABLE MyWork
+(
+    SSN CHAR(9),
+    Pnum INT,
+    Hours INT,
+    PRIMARY KEY (SSN, Pnum),
+    FOREIGN KEY (SSN) REFERENCES EMP(SSN),
+    FOREIGN KEY (Pnum) REFERENCES Project(Pnum)
+);
+
+
+SELECT * FROM EMP;
+
+INSERT INTO dept VALUES
+(1, 'HR', 1111, '2020-03-09'),
+(2, 'IT', NULL, '2018-09-13'),
+(3,'MATH',NULL, '2024-08-16'),
+(4, 'ARABIC', NULL, '2013-10-10'),
+(5,'ENGLISH',NULL, '2010-09-12');
+
+INSERT INTO EMP VALUES
+(111111111, '1990-05-01', 'M', 'Ali', 'Salim', 1, NULL),
+(222222222, '1992-08-10', 'F', 'Sara', 'Noor', 2, 111111111),
+(333333333,'2002-08-20', 'F', 'Arwa', 'Hilal', 3, 333333333), 
+(444444444,'2005-06-30', 'M', 'Mohammed', 'Essa', 4, NULL),
+(555555555,'2012-08-10', 'M', 'Malik', 'Emad', 5, 111111111);
+
+INSERT INTO Locations VALUES
+(1, 'Muscat'),
+(2, 'Salalah'),
+(3,'ALAMERAT'),
+(4,'Bousher'),
+(5, 'Dubai');
+
+INSERT INTO Project VALUES
+(10, 'HR System', 'Muscat', 'HQ', 1),
+(20, 'Website', 'Dubai', 'Branch', 2),
+(30,'Ciber','Jordan','HQ',3),
+(40, 'Google', 'Qatar', 'Branch', 4),
+(50,'System','','HQ',5);
+
+INSERT INTO Dependent VALUES
+(111111111,'HR','F', '1991-06-01'),
+(222222222,'IT','F','2002-03-30'),
+(333333333,'MATH','M', '1991-06-22'),
+(444444444,'ENGLISH','M','2002-03-10'),
+(555555555,'ARABIC','F','1991-06-01');
+
+INSERT INTO MyWork VALUES
+('111111111', 10, 20),
+('222222222', 20, 30),
+('333333333', 30, 40),
+('444444444', 40, 50),
+('555555555', 50, 60);
+
+UPDATE Dept
+SET MgrSSN = '111111111'
+WHERE Dnum = 1;
+
+
+
+
+
+
+
+
